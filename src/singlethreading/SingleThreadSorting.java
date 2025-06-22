@@ -8,7 +8,7 @@ public class SingleThreadSorting {
 
     MergeSortUtil mergeSortUtil = new MergeSortUtil();
 
-    private int[] array;
+    private final int[] array;
     private int[] sortedArray;
 
     public SingleThreadSorting(int[] inputArray) {
@@ -18,8 +18,6 @@ public class SingleThreadSorting {
 
     public long sort() {
         System.out.println("=== Single Thread Sorting ===");
-//        System.out.println("Original Array: " + Arrays.toString(array));
-//        System.out.println("Thread: " + Thread.currentThread().getName());
 
         long startTime = System.nanoTime();
 

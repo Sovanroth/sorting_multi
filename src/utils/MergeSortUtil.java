@@ -2,8 +2,6 @@ package utils;
 
 public class MergeSortUtil {
 
-    private int[] sortedArray;
-
     public void mergeSort(int[] arr, int left, int right) {
         if (left < right) {
             int mid = left + (right - left) / 2;
@@ -49,9 +47,5 @@ public class MergeSortUtil {
             j++;
             k++;
         }
-    }
-
-    public int[] getSortedArray() {
-        return sortedArray;
     }
 }

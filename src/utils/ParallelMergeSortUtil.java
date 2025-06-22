@@ -2,7 +2,7 @@ package utils;
 
 import java.util.concurrent.RecursiveAction;
 
-public class ParallelMergeSortUtil extends RecursiveAction  {
+public class ParallelMergeSortUtil extends RecursiveAction {
 
     private final int[] array;
     private final int left;

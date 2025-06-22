@@ -9,30 +9,22 @@ import java.util.Random;
 public class ComparingUtil {
 
     public static void performComparison(int size) {
-        // Generate random array
+
         int[] originalArray = generateRandomArray(size);
 
-        try {
-            // Single threaded sorting
-            SingleThreadSorting singleSort = new SingleThreadSorting(originalArray);
-            long singleTime = singleSort.sort();
+        SingleThreadSorting singleSort = new SingleThreadSorting(originalArray);
 
-            // Multi threaded sorting
-            MultiThreadSorting multiSort = new MultiThreadSorting(originalArray);
-            long multiTime = multiSort.sort();
+        MultiThreadSorting multiSort = new MultiThreadSorting(originalArray);
 
-            // Verify both results are correct and identical
-            if (!Arrays.equals(singleSort.getSortedArray(), multiSort.getSortedArray())) {
-                System.err.println("ERROR: Sorting results don't match!");
-            }
-
-        } catch (InterruptedException e) {
-            System.err.println("Thread interrupted: " + e.getMessage());
+        // Verify both results are correct
+        if (!Arrays.equals(singleSort.getSortedArray(), multiSort.getSortedArray())) {
+            System.err.println("ERROR: Sorting results don't match!");
         }
+
     }
 
     public static int[] generateRandomArray(int size) {
-        Random random = new Random(42); // Fixed seed for reproducible results
+        Random random = new Random(50);
         int[] array = new int[size];
 
         for (int i = 0; i < size; i++) {
