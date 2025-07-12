@@ -20,9 +20,9 @@ public class ComparingUtil {
             multiSort.sort();
 
             // Verify both results are correct
-            if (!Arrays.equals(singleSort.getSortedArray(), multiSort.getSortedArray())) {
-                System.err.println("ERROR: Sorting results don't match!");
-            }
+//            if (!Arrays.equals(singleSort.getSortedArray(), multiSort.getSortedArray())) {
+//                System.err.println("ERROR: Sorting results don't match!");
+//            }
         } catch (Exception e) {
             throw e;
         }

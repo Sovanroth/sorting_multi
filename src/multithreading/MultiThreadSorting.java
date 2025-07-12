@@ -17,10 +17,10 @@ public class MultiThreadSorting {
         this.numThreads = Runtime.getRuntime().availableProcessors();
     }
 
-    public long sort() throws InterruptedException {
-        System.out.println("=== Multi Thread Sorting (Using All CPU Cores) ===");
-        System.out.println("Available CPU Cores: " + numThreads);
-        // System.out.println("Original Array: " + Arrays.toString(array));
+    public void sort() {
+        System.out.println("=== Multi Thread Sorting (Using " + numThreads +  " Cores) ===");
+//        System.out.println("Original Array: " + Arrays.toString(array));
+//        System.out.println("Sorted Array: " + Arrays.toString(sortedArray));
         System.out.println("Main Thread: " + Thread.currentThread().getName());
 
         long startTime = System.nanoTime();
@@ -49,9 +49,7 @@ public class MultiThreadSorting {
 
         System.out.println("Threads used: " + numThreads);
         System.out.println("Execution Time: " + (executionTime / 1_000_000.0) + " ms");
-        System.out.println();
 
-        return executionTime;
     }
 
     public int[] getSortedArray() {

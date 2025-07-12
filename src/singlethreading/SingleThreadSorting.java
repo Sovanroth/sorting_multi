@@ -16,7 +16,7 @@ public class SingleThreadSorting {
         this.sortedArray = new int[inputArray.length];
     }
 
-    public long sort() {
+    public void sort() {
         System.out.println("=== Single Thread Sorting ===");
 
         long startTime = System.nanoTime();
@@ -25,13 +25,14 @@ public class SingleThreadSorting {
         mergeSortUtil.mergeSort(array, 0, array.length - 1);
         sortedArray = Arrays.copyOf(array, array.length);
 
+//        System.out.println("Original Array: " + Arrays.toString(array));
+//        System.out.println("Sorted Array: " + Arrays.toString(sortedArray));
+
         long endTime = System.nanoTime();
         long executionTime = endTime - startTime;
 
         System.out.println("Execution Time: " + (executionTime / 1_000_000.0) + " ms");
-        System.out.println();
 
-        return executionTime;
     }
 
     public int[] getSortedArray() {
