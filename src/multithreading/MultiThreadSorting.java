@@ -21,7 +21,6 @@ public class MultiThreadSorting {
         System.out.println("=== Multi Thread Sorting (Using " + numThreads +  " Cores) ===");
 //        System.out.println("Original Array: " + Arrays.toString(array));
 //        System.out.println("Sorted Array: " + Arrays.toString(sortedArray));
-        System.out.println("Main Thread: " + Thread.currentThread().getName());
 
         long startTime = System.nanoTime();
 
