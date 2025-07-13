@@ -23,10 +23,11 @@ public class SingleThreadSorting {
 
         // Use merge sort algorithm
         mergeSortUtil.mergeSort(array, 0, array.length - 1);
-        sortedArray = Arrays.copyOf(array, array.length);
 
-//        System.out.println("Original Array: " + Arrays.toString(array));
-//        System.out.println("Sorted Array: " + Arrays.toString(sortedArray));
+        // can command when test speed benchmark
+        sortedArray = Arrays.copyOf(array, array.length);
+        System.out.println("Original Array: " + Arrays.toString(array));
+        System.out.println("Sorted Array: " + Arrays.toString(sortedArray));
 
         long endTime = System.nanoTime();
         long executionTime = endTime - startTime;

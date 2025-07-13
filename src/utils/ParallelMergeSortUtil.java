@@ -1,14 +1,17 @@
 package utils;
 
-import java.util.concurrent.RecursiveAction;
+/**
+ * ParallelMergeSortUtil extend class thread able to sort array with multi-threading
+ */
+public class ParallelMergeSortUtil extends Thread {
 
-public class ParallelMergeSortUtil extends RecursiveAction {
+    private static final MergeSortUtil mergeSortUtil = new MergeSortUtil();
 
     private final int[] array;
     private final int left;
     private final int right;
     private final int maxThreads;
-    private static final int THRESHOLD = 1000; // Switch to sequential below this size
+    private static final int THRESHOLD = 1000;
 
     public ParallelMergeSortUtil(int[] array, int left, int right, int maxThreads) {
         this.array = array;
@@ -18,68 +21,108 @@ public class ParallelMergeSortUtil extends RecursiveAction {
     }
 
     @Override
-    protected void compute() {
-        if (right - left < THRESHOLD || maxThreads <= 1) {
-            // Use sequential merge sort for small arrays or when threads are limited
-            sequentialMergeSort(array, left, right);
-        } else {
-            // Divide the work
-            int mid = left + (right - left) / 2;
-
-            // Create subtasks
-            ParallelMergeSortUtil leftTask = new ParallelMergeSortUtil(array, left, mid, maxThreads / 2);
-            ParallelMergeSortUtil rightTask = new ParallelMergeSortUtil(array, mid + 1, right, maxThreads / 2);
-
-            // Execute in parallel
-            invokeAll(leftTask, rightTask);
-
-            // Merge the results
-            merge(array, left, mid, right);
-        }
+    public void run() {
+        mergeSort(array, left, right, maxThreads);
     }
 
-    private void sequentialMergeSort(int[] arr, int left, int right) {
+    /**
+     * Recursive merge sort method
+     * @param arr the array to be sorted
+     * @param left the starting index
+     * @param right the ending index
+     * @param threads the number of threads available for this operation
+     */
+    private void mergeSort(int[] arr, int left, int right, int threads) {
+
+        // return if array already sort
+        if (left >= right) {
+            return;
+        }
+
+        // Use sequential sorting if array is small or threads are limited
+        if (right - left < THRESHOLD || threads <= 1) {
+            sequentialMergeSort(arr, left, right);
+            return;
+        }
+
+        // Divide the array into two arrays
+        int mid = left + (right - left) / 2;
+
+        // Create threads for parallel processing of left and right array
+        ParallelMergeSortUtil leftThread = new ParallelMergeSortUtil(arr, left, mid, threads / 2);
+        ParallelMergeSortUtil rightThread = new ParallelMergeSortUtil(arr, mid + 1, right, threads / 2);
+
+        // Start both threads to merge left and right
+        leftThread.start();
+        rightThread.start();
+
+        try {
+
+            leftThread.join();
+            rightThread.join();
+
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        // After both arrays are sorted, merge together
+        mergeSortUtil.merge(arr, left, mid, right);
+    }
+
+    /**
+     * Sequential merge sort implementation used for small arrays or when threads are limited.
+     * Falls back to standard recursive approach to avoid thread overhead.
+     * @param arr   the array to be sorted
+     * @param left  the starting index
+     * @param right the ending index
+     */
+    private void sequentialMergeSort(
+            int[] arr,
+            int left,
+            int right
+    ) {
+
+        // Base case: arrays with 0 or 1 element are already sorted
         if (left < right) {
+
+            // Find the middle point of array
             int mid = left + (right - left) / 2;
+
+            // Recursively sort both array
             sequentialMergeSort(arr, left, mid);
             sequentialMergeSort(arr, mid + 1, right);
-            merge(arr, left, mid, right);
+
+            // Merge the sorted halves
+            mergeSortUtil.merge(arr, left, mid, right);
         }
     }
 
-    private void merge(int[] arr, int left, int mid, int right) {
-        int n1 = mid - left + 1;
-        int n2 = right - mid;
-
-        int[] leftArray = new int[n1];
-        int[] rightArray = new int[n2];
-
-        System.arraycopy(arr, left, leftArray, 0, n1);
-        System.arraycopy(arr, mid + 1, rightArray, 0, n2);
-
-        int i = 0, j = 0, k = left;
-
-        while (i < n1 && j < n2) {
-            if (leftArray[i] <= rightArray[j]) {
-                arr[k] = leftArray[i];
-                i++;
-            } else {
-                arr[k] = rightArray[j];
-                j++;
-            }
-            k++;
+    /**
+     * Method to start the parallel merge sort process.
+     * @param array the array to be sorted
+     * @param maxThreads the maximum number of threads to use
+     */
+    public static void sortArray(
+            int[] array,
+            int maxThreads
+    ) {
+        if (
+                array == null ||
+                array.length <= 1
+        ) {
+            return;
         }
 
-        while (i < n1) {
-            arr[k] = leftArray[i];
-            i++;
-            k++;
-        }
+        // Create and start the main sorting thread
+        ParallelMergeSortUtil mainThread =
+                new ParallelMergeSortUtil(array, 0, array.length - 1, maxThreads);
+        mainThread.start();
 
-        while (j < n2) {
-            arr[k] = rightArray[j];
-            j++;
-            k++;
+        try {
+            mainThread.join();
+
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 }

@@ -3,7 +3,6 @@ package multithreading;
 import utils.ParallelMergeSortUtil;
 
 import java.util.Arrays;
-import java.util.concurrent.ForkJoinPool;
 
 public class MultiThreadSorting {
 
@@ -18,37 +17,30 @@ public class MultiThreadSorting {
     }
 
     public void sort() {
-        System.out.println("=== Multi Thread Sorting (Using " + numThreads +  " Cores) ===");
-//        System.out.println("Original Array: " + Arrays.toString(array));
-//        System.out.println("Sorted Array: " + Arrays.toString(sortedArray));
+        System.out.println("=== Multi Thread Sorting (Using " + numThreads + " Cores) ===");
+
+        // can command when test speed benchmark
+        System.out.println("Original Array: " + Arrays.toString(array));
+        //==================================================
 
         long startTime = System.nanoTime();
 
-        // Use ForkJoinPool to utilize all available cores
-        try (ForkJoinPool forkJoinPool = new ForkJoinPool(numThreads)) {
+        // Copy array for sorting
+        int[] workArray = Arrays.copyOf(array, array.length);
 
-            try {
-                // Copy array for sorting
-                int[] workArray = Arrays.copyOf(array, array.length);
-
-                // Create and execute parallel merge sort task
-                ParallelMergeSortUtil task = new ParallelMergeSortUtil(workArray, 0, workArray.length - 1, numThreads);
-                forkJoinPool.invoke(task);
-
-                // Copy sorted result
-                System.arraycopy(workArray, 0, sortedArray, 0, workArray.length);
-
-            } finally {
-                forkJoinPool.shutdown();
-            }
-        }
+        // sort array
+        ParallelMergeSortUtil.sortArray(workArray, numThreads);
 
         long endTime = System.nanoTime();
         long executionTime = endTime - startTime;
 
+        // can command when test speed benchmark
+        System.arraycopy(workArray, 0, sortedArray, 0, workArray.length);
+        System.out.println("Sorted Array: " + Arrays.toString(sortedArray));
+
+        //===================================================
         System.out.println("Threads used: " + numThreads);
         System.out.println("Execution Time: " + (executionTime / 1_000_000.0) + " ms");
-
     }
 
     public int[] getSortedArray() {
