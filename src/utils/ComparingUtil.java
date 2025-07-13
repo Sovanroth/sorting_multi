@@ -8,7 +8,7 @@ import java.util.Random;
 
 public class ComparingUtil {
 
-    public static void performComparison(int size) throws Exception {
+    public static void performComparison(int size) {
 
         try {
 

@@ -76,11 +76,7 @@ public class ParallelMergeSortUtil extends Thread {
      * @param left  the starting index
      * @param right the ending index
      */
-    private void sequentialMergeSort(
-            int[] arr,
-            int left,
-            int right
-    ) {
+    private void sequentialMergeSort(int[] arr, int left, int right) {
 
         // Base case: arrays with 0 or 1 element are already sorted
         if (left < right) {
@@ -102,26 +98,20 @@ public class ParallelMergeSortUtil extends Thread {
      * @param array the array to be sorted
      * @param maxThreads the maximum number of threads to use
      */
-    public static void sortArray(
-            int[] array,
-            int maxThreads
-    ) {
-        if (
-                array == null ||
-                array.length <= 1
+    public static void sortArray(int[] array, int maxThreads) {
+        if (array == null || array.length <= 1
         ) {
             return;
         }
 
         // Create and start the main sorting thread
-        ParallelMergeSortUtil mainThread =
-                new ParallelMergeSortUtil(array, 0, array.length - 1, maxThreads);
+        ParallelMergeSortUtil mainThread = new ParallelMergeSortUtil(array, 0, array.length - 1, maxThreads);
         mainThread.start();
 
         try {
             mainThread.join();
 
-        } catch (InterruptedException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
